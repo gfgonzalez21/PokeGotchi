@@ -2,15 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/estilos.css" />
     <title>Reto PokeGotchi</title>
   </head>
   <body>
     <h1>PokeGotchi</h1>
     <div id="buscar">
-      Nombre del Pokemon:
+      Pokemon:
       <input type="text" id="nombreP" />
       <button onclick="buscarP()">Buscar</button>
     </div>
@@ -20,48 +18,47 @@
     <ul id="pokedex"></ul>
 
     <script>
-      //almacenamos los pokemons que se han añadido ya a la pokedex
+      //Almacenamos los pokemons que se han añadido ya a la pokedex
       const pokedexP = [];
       // Función para buscar un pokemon por su nombre
-      function buscarP() {
-        //recuperamos el valor de nombre
-        const pokemonNombre = document.getElementById("nombreP").value;
-
-        fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNombre.toLowerCase()}`)
-        //convierte los datos en un objeto js
-          .then((resultadoD) => resultadoD.json())
-          .then((datos) => {
-            // Mostrar información del pokemon
-              //recuperamos el valor de 
-            const pokemonInfo = document.getElementById("infoP");
-            pokemonInfo.innerHTML = `
-                    <h3>${datos.name}</h3>
-                    <img src="${datos.sprites.front_default}" alt="${datos.name}" />
-                    <p><b>Estado de salud:</b> ${datos.stats[0].base_stat}</p>
-                    <p><b>Tipo:</b> ${datos.types[0].type.name}</p>
-                  `;
-
-      //validamos si esta en la pokedex
-      if (pokedexP.includes(datos.name)) {
-        alert("Este pokemon ya se encuentra en la Pokédex.");
-      } else {
-        // Agregar el nombre del pokemon 
-        pokedexP.push(datos.name);
-
-        // mostramos el pokemon en la pokedex
-        const pokedex = document.getElementById("pokedex");
-        const listaP = document.createElement("li");
-        listaP.innerHTML = `
-          <img src="${datos.sprites.front_default}" alt="${datos.name}" />
-        `;
-        pokedex.appendChild(listaP);
-      }
-    })
-    //si el pokemon no esta registrado en la API
-          .catch((error) => {
-            console.error(error);
-            alert("No se encontró el Pokemon");
-          });
+      async function buscarP() {
+        try {
+          // Recuperamos el valor de nombre
+          const pokemonNombre = document.getElementById("nombreP").value;
+      
+          const resultadoD = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNombre.toLowerCase()}`);
+      
+          // Convertimos los datos en un objeto JS
+          const datos = await resultadoD.json();
+      
+          // Mostramos información del pokemon
+          const pokemonInfo = document.getElementById("infoP");
+          pokemonInfo.innerHTML = `
+            <h3>${datos.name}</h3>
+            <img src="${datos.sprites.front_default}" alt="${datos.name}" />
+            <p><b>Estado de salud:</b> ${datos.stats[0].base_stat}</p>
+            <p><b>Tipo:</b> ${datos.types[0].type.name}</p>
+          `;
+      
+          // Validamos si el pokemon está en la pokedex
+          if (pokedexP.includes(datos.name)) {
+            //Si el pokemon está 
+            alert("Este pokemon ya se encuentra en la Pokédex.");
+          } else {
+            // Si no está agregamos el nombre del pokemon
+            pokedexP.push(datos.name);
+      
+            // Mostramos el pokemon en la pokedex
+            const pokedex = document.getElementById("pokedex");
+            const listaP = document.createElement("li");
+            listaP.innerHTML = `
+              <img src="${datos.sprites.front_default}" alt="${datos.name}" />
+            `;
+            pokedex.appendChild(listaP);
+          }
+        } catch (error) {
+          alert("No se encontró el Pokemon");
+        }
       }
     </script>
   </body>

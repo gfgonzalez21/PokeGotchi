@@ -4,10 +4,9 @@ body {
   height: 100vh;
 background-image: linear-gradient(
     to bottom right,
-    yellow 10%,
+    yellow 50%,
     blue 50%
 );
-background-size: 200% 200%;
 }
 
   h1 {
@@ -23,9 +22,9 @@ background-size: 200% 200%;
 
 
   #pokemon-info {
-    margin-top: 20px;
+   
+     margin-top: 20px;
     text-align: center;
-    
   }
 
   #pokemon-info img {
